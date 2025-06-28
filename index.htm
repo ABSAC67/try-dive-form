@@ -282,16 +282,19 @@
                 background-color: #fff;
                 display: block;
                 min-height: auto;
-                font-size: 0.8rem; /* Even smaller base font for print */
+                font-size: 0.7rem; /* Smaller base font for print */
             }
             .form-container {
                 box-shadow: none;
                 border: none;
                 border-radius: 0;
-                padding: 5px; /* Minimal padding */
+                padding: 3px; /* Minimal padding */
                 margin: auto; /* Center on page */
                 width: 100%; /* Ensure it uses full print width */
+                max-width: 210mm; /* A4 width */
+                height: 297mm; /* A4 height, allowing content to stretch */
                 box-sizing: border-box; /* Include padding in width */
+                overflow: hidden; /* Hide anything that spills over */
             }
             .button-group,
             .email-info,
@@ -301,21 +304,21 @@
             /* Ensure instruction text is visible on print and matches content styles */
             .main-instruction-text {
                 display: block !important; /* Force display on print */
-                font-size: 0.75rem !important; /* Slightly smaller for compactness */
+                font-size: 0.7rem !important; /* Smaller for compactness */
                 font-weight: bold !important; /* Keep bold for print */
                 color: #000 !important; /* Ensure black text for print */
-                margin-top: 5px !important; /* Tighter spacing */
-                margin-bottom: 8px !important; /* Tighter spacing */
+                margin-top: 4px !important; /* Tighter spacing */
+                margin-bottom: 6px !important; /* Tighter spacing */
                 padding: 0 !important; /* No horizontal padding */
                 text-align: left !important;
-                line-height: 1.1 !important; /* Tighter line height for instructions */
+                line-height: 1.05 !important; /* Tighter line height for instructions */
             }
             /* Main grid layout for print */
             .form-grid {
                 display: grid;
-                grid-template-columns: 100px 1fr; /* Fixed width for labels, auto for inputs */
-                column-gap: 5px; /* Minimal column gap */
-                row-gap: 4px; /* Minimal row gap */
+                grid-template-columns: 90px 1fr; /* Very tight label column, rest for input */
+                column-gap: 3px; /* Minimal column gap */
+                row-gap: 3px; /* Minimal row gap */
                 width: 100%;
             }
             /* Labels within form-grid for print */
@@ -327,8 +330,8 @@
                 box-sizing: border-box;
                 font-weight: 500;
                 color: #000;
-                line-height: 1.1; /* Tighter line height */
-                font-size: 0.85rem; /* Consistent font size */
+                line-height: 1.05; /* Tighter line height */
+                font-size: 0.75rem; /* Consistent font size */
                 margin-bottom: 0; /* Row-gap handles this */
             }
             /* Inputs/Textareas within form-grid for print */
@@ -341,16 +344,16 @@
                 background-color: transparent !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
-                padding: 0 2px !important; /* Minimal padding */
+                padding: 0 1px !important; /* Minimal padding */
                 color: #000;
                 box-sizing: border-box;
-                min-height: 1em;
-                font-size: 0.85rem; /* Consistent font size */
+                min-height: 0.9em; /* Even smaller min-height */
+                font-size: 0.75rem; /* Consistent font size */
                 margin-bottom: 0; /* Row-gap handles this */
             }
 
             .form-grid textarea {
-                min-height: 2em; /* Even shorter for address */
+                min-height: 1.8em; /* Even shorter for address */
             }
 
             /* Hide placeholder text on print */
@@ -377,8 +380,8 @@
 
             /* Fixed-width inputs (Postcode, Telephone, Date of birth) for print */
             .fixed-width-input {
-                width: 120px !important; /* Further reduced fixed width */
-                max-width: 120px !important;
+                width: 110px !important; /* Further reduced fixed width */
+                max-width: 110px !important;
                 flex-shrink: 0 !important;
                 flex-grow: 0 !important;
             }
@@ -388,7 +391,7 @@
                 grid-column: 2 / 3 !important; /* Ensure it stays in the second column of the form-grid */
                 display: flex !important; /* Keep flex for horizontal alignment */
                 align-items: center !important;
-                gap: 5px !important; /* Very small gap for print */
+                gap: 3px !important; /* Very small gap for print */
                 flex-wrap: wrap !important;
                 width: 100% !important; /* Ensure it takes full width of its grid cell */
                 margin-top: 0 !important; /* Vertical spacing controlled by parent form-grid row-gap */
@@ -400,7 +403,7 @@
                 padding-right: 0 !important; /* No padding, gap handles it */
                 color: #000 !important;
                 font-weight: 500 !important;
-                font-size: 0.85rem !important;
+                font-size: 0.75rem !important; /* Consistent font size */
                 margin-right: 0 !important; /* Gap handles spacing */
             }
             .contact-inputs-group input {
@@ -408,23 +411,23 @@
             }
 
             /* Generic print styles for other elements */
-            p { margin-bottom: 4px !important; margin-top: 4px !important; line-height: 1.15 !important; color: #000 !important; }
+            p { margin-bottom: 3px !important; margin-top: 3px !important; line-height: 1.1 !important; color: #000 !important; font-size: 0.75rem !important; }
             ol {
                 list-style-position: outside;
-                margin-left: 20px !important; /* Slightly reduce overall list indent for print */
+                margin-left: 18px !important; /* Slightly reduce overall list indent for print */
                 padding-left: 0 !important;
-                width: calc(100% - 20px) !important;
+                width: calc(100% - 18px) !important; /* Adjust width to account for margin-left */
             }
-            li { margin-bottom: 2px !important; line-height: 1.15 !important; color: #000 !important; font-size: 0.8rem !important; }
-            .section-title { margin-top: 8px !important; margin-bottom: 6px !important; color: #000 !important; font-size: 0.9rem !important; }
-            .certify-text-blue { color: #000 !important; margin-top: 8px !important; margin-bottom: 6px !important; font-size: 0.85rem !important; }
-            .form-header { color: #000 !important; margin-bottom: 5px !important; font-size: 1.6rem !important; }
-            .header-spacer { margin-bottom: 10px !important; }
-            .list-spacer { margin-top: 8px !important; margin-bottom: 10px !important; }
+            li { margin-bottom: 1px !important; line-height: 1.1 !important; color: #000 !important; font-size: 0.75rem !important; }
+            .section-title { margin-top: 6px !important; margin-bottom: 5px !important; color: #000 !important; font-size: 0.8rem !important; }
+            .certify-text-blue { color: #000 !important; margin-top: 6px !important; margin-bottom: 5px !important; font-size: 0.75rem !important; }
+            .form-header { color: #000 !important; margin-bottom: 4px !important; font-size: 1.5rem !important; line-height: 1.1 !important; }
+            .header-spacer { margin-bottom: 8px !important; }
+            .list-spacer { margin-top: 6px !important; margin-bottom: 8px !important; }
             .bsac-logo {
-                width: 80px !important; /* Even smaller logo for print */
+                width: 70px !important; /* Even smaller logo for print */
                 height: auto !important;
-                margin-top: 5px !important; margin-bottom: 5px !important;
+                margin-top: 4px !important; margin-bottom: 4px !important;
             }
         }
     </style>
