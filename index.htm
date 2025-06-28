@@ -118,7 +118,6 @@
             gap: 15px; /* Space between the telephone input and the DOB label */
             flex-wrap: wrap; /* Allow wrapping on smaller screens */
             width: 100%; /* Take full width of its grid cell */
-            /* Add some top margin to separate from the email field */
             margin-top: 0px; /* Adjust this if vertical spacing is off. It should be handled by row-gap on .form-grid */
         }
 
@@ -200,16 +199,6 @@
             transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
             font-weight: 600;
         }
-        .print-button {
-            background-color: #2ecc71;
-            color: white;
-            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
-        }
-        .print-button:hover {
-            background-color: #27ae60;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(46, 204, 113, 0.4);
-        }
         .email-button {
             background-color: #3498db;
             color: white;
@@ -263,171 +252,119 @@
             background-color: #2980b9;
         }
 
-
-        /* Print specific styles */
-        @media print {
-            /* Remove default browser headers and footers */
-            @page {
-                margin: 0 !important;
-            }
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                /* Non-standard properties to potentially remove headers/footers in some browsers */
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
+        /* Mobile-specific styles (for screens up to 768px wide) */
+        @media (max-width: 768px) {
             body {
-                background-color: #fff;
-                display: block;
-                min-height: auto;
-                font-size: 0.7rem; /* Smaller base font for print */
+                padding: 10px; /* Reduce overall body padding on small screens */
             }
             .form-container {
-                box-shadow: none;
-                border: none;
-                border-radius: 0;
-                padding: 3px; /* Minimal padding */
-                margin: auto; /* Center on page */
-                width: 100%; /* Ensure it uses full print width */
-                max-width: 210mm; /* A4 width */
-                height: 297mm; /* A4 height, allowing content to stretch */
-                box-sizing: border-box; /* Include padding in width */
-                overflow: hidden; /* Hide anything that spills over */
+                padding: 15px; /* Reduce container padding for mobile */
+                border-radius: 8px; /* Slightly smaller rounded corners for mobile */
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Lighter shadow */
             }
-            .button-group,
-            .email-info,
-            .message-box { /* Hide buttons, email info, and message box on print */
-                display: none;
+            .form-header {
+                font-size: 1.5rem; /* Smaller header font size */
+                margin-bottom: 10px;
             }
-            /* Ensure instruction text is visible on print and matches content styles */
+            .header-spacer {
+                margin-bottom: 20px;
+            }
+            p {
+                font-size: 0.95rem; /* Slightly smaller paragraph text */
+                line-height: 1.4;
+                margin-bottom: 10px;
+            }
             .main-instruction-text {
-                display: block !important; /* Force display on print */
-                font-size: 0.7rem !important; /* Smaller for compactness */
-                font-weight: bold !important; /* Keep bold for print */
-                color: #000 !important; /* Ensure black text for print */
-                margin-top: 4px !important; /* Tighter spacing */
-                margin-bottom: 6px !important; /* Tighter spacing */
-                padding: 0 !important; /* No horizontal padding */
-                text-align: left !important;
-                line-height: 1.05 !important; /* Tighter line height for instructions */
+                font-size: 0.95rem;
+                margin-top: 15px;
+                margin-bottom: 20px;
             }
-            /* Main grid layout for print */
+            .section-title {
+                font-size: 1rem;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
             .form-grid {
-                display: grid;
-                grid-template-columns: 90px 1fr; /* Very tight label column, rest for input */
-                column-gap: 3px; /* Minimal column gap */
-                row-gap: 3px; /* Minimal row gap */
-                width: 100%;
+                grid-template-columns: 1fr; /* Stack labels and inputs into a single column */
+                row-gap: 8px; /* Tighter row gap for stacked elements */
             }
-            /* Labels within form-grid for print */
+
             .form-grid label {
-                grid-column: 1 / 2; /* Ensure label is in first column */
-                text-align: right;
-                align-self: center;
-                padding-right: 0; /* Remove padding here, controlled by column-gap */
-                box-sizing: border-box;
-                font-weight: 500;
-                color: #000;
-                line-height: 1.05; /* Tighter line height */
-                font-size: 0.75rem; /* Consistent font size */
-                margin-bottom: 0; /* Row-gap handles this */
+                grid-column: auto; /* Revert to auto column for stacking */
+                text-align: left; /* Left align labels when stacked */
+                margin-right: 0; /* Remove right margin */
+                margin-bottom: 2px; /* Small space between label and input */
+                font-size: 0.95rem; /* Slightly smaller label font */
             }
-            /* Inputs/Textareas within form-grid for print */
-            .form-grid input:not(.fixed-width-input),
+
+            .form-grid input,
             .form-grid textarea {
-                grid-column: 2 / 3; /* Ensure input is in second column */
-                width: 100%;
-                border: none !important;
-                border-bottom: 1px dotted #999 !important;
-                background-color: transparent !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                padding: 0 1px !important; /* Minimal padding */
-                color: #000;
-                box-sizing: border-box;
-                min-height: 0.9em; /* Even smaller min-height */
-                font-size: 0.75rem; /* Consistent font size */
-                margin-bottom: 0; /* Row-gap handles this */
+                grid-column: auto; /* Revert to auto column for stacking */
+                width: 100%; /* Make inputs full width on mobile */
+                max-width: none; /* Remove max-width restriction */
+                box-sizing: border-box; /* Crucial for full width */
+                font-size: 1.05rem; /* Slightly larger font for touch targets */
+                padding: 10px 12px; /* Larger padding for touch targets */
+                min-height: 45px; /* Ensure a decent minimum height for inputs */
             }
 
             .form-grid textarea {
-                min-height: 1.8em; /* Even shorter for address */
+                min-height: 80px; /* Increased min-height for address textarea on mobile */
             }
 
-            /* Hide placeholder text on print */
-            input::placeholder,
-            textarea::placeholder {
-                color: transparent !important;
-            }
-            input::-webkit-input-placeholder,
-            textarea::-webkit-input-placeholder { /* Webkit browsers */
-                color: transparent !important;
-            }
-            input::-moz-placeholder,
-            textarea::-moz-placeholder { /* Firefox (older) */
-                color: transparent !important;
-            }
-            input:-ms-input-placeholder,
-            textarea:-ms-input-placeholder { /* Internet Explorer */
-                color: transparent !important;
-            }
-            input::-ms-input-placeholder,
-            textarea::-ms-ms-input-placeholder { /* Microsoft Edge */
-                color: transparent !important;
-            }
-
-            /* Fixed-width inputs (Postcode, Telephone, Date of birth) for print */
+            /* Override fixed-width for mobile, make them full width */
             .fixed-width-input {
-                width: 110px !important; /* Further reduced fixed width */
-                max-width: 110px !important;
-                flex-shrink: 0 !important;
-                flex-grow: 0 !important;
+                width: 100% !important; /* Force full width */
+                max-width: none !important; /* Remove max-width */
             }
 
-            /* Special handling for telephone and DOB line for print */
+            /* Adjust contact-inputs-group for stacking on mobile */
             .contact-inputs-group {
-                grid-column: 2 / 3 !important; /* Ensure it stays in the second column of the form-grid */
-                display: flex !important; /* Keep flex for horizontal alignment */
-                align-items: center !important;
-                gap: 3px !important; /* Very small gap for print */
-                flex-wrap: wrap !important;
-                width: 100% !important; /* Ensure it takes full width of its grid cell */
-                margin-top: 0 !important; /* Vertical spacing controlled by parent form-grid row-gap */
-                margin-bottom: 0 !important; /* Vertical spacing controlled by parent form-grid row-gap */
+                grid-column: auto; /* No longer spans column 2, just flows naturally */
+                display: block; /* Change to block to force stacking of its children */
+                width: 100%; /* Take full width */
+                gap: 0; /* No gaps needed when stacking */
+                margin-top: 0; /* Keep consistent with form-grid row-gap */
             }
             .contact-inputs-group label[for="dob"] {
-                flex-shrink: 0 !important;
-                text-align: right !important;
-                padding-right: 0 !important; /* No padding, gap handles it */
-                color: #000 !important;
-                font-weight: 500 !important;
-                font-size: 0.75rem !important; /* Consistent font size */
-                margin-right: 0 !important; /* Gap handles spacing */
+                display: block; /* Make DOB label a block element to stack */
+                width: 100%; /* Take full width */
+                text-align: left; /* Left align when stacked */
+                margin-top: 10px; /* Space above DOB label when stacked */
+                margin-bottom: 2px; /* Space between label and input */
+                font-size: 0.95rem; /* Consistent font size */
             }
-            .contact-inputs-group input {
-                /* Inherits from form-grid input styles */
+            .contact-inputs-group input#telephone,
+            .contact-inputs-group input#dob {
+                width: 100% !important; /* Ensure fixed-width inputs go full width on mobile */
+                padding: 10px 12px; /* Consistent padding for touch targets */
+                min-height: 45px; /* Consistent height */
             }
 
-            /* Generic print styles for other elements */
-            p { margin-bottom: 3px !important; margin-top: 3px !important; line-height: 1.1 !important; color: #000 !important; font-size: 0.75rem !important; }
+            /* List item adjustments for mobile */
             ol {
-                list-style-position: outside;
-                margin-left: 18px !important; /* Slightly reduce overall list indent for print */
-                padding-left: 0 !important;
-                width: calc(100% - 18px) !important; /* Adjust width to account for margin-left */
+                margin-left: 20px; /* Slightly reduce list indent on mobile */
+                width: calc(100% - 20px);
             }
-            li { margin-bottom: 1px !important; line-height: 1.1 !important; color: #000 !important; font-size: 0.75rem !important; }
-            .section-title { margin-top: 6px !important; margin-bottom: 5px !important; color: #000 !important; font-size: 0.8rem !important; }
-            .certify-text-blue { color: #000 !important; margin-top: 6px !important; margin-bottom: 5px !important; font-size: 0.75rem !important; }
-            .form-header { color: #000 !important; margin-bottom: 4px !important; font-size: 1.5rem !important; line-height: 1.1 !important; }
-            .header-spacer { margin-bottom: 8px !important; }
-            .list-spacer { margin-top: 6px !important; margin-bottom: 8px !important; }
+            .numbered-list-item {
+                margin-bottom: 8px; /* Tighter list spacing */
+                font-size: 0.95rem;
+            }
+
             .bsac-logo {
-                width: 70px !important; /* Even smaller logo for print */
-                height: auto !important;
-                margin-top: 4px !important; margin-bottom: 4px !important;
+                width: 120px; /* Smaller logo for mobile */
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .button-group {
+                gap: 15px; /* Smaller gap between buttons */
+                margin-top: 25px;
+                padding-top: 15px;
+            }
+            .action-button {
+                padding: 10px 20px; /* Slightly smaller button padding */
+                font-size: 1rem; /* Consistent button font size */
             }
         }
     </style>
@@ -474,7 +411,7 @@
 
         <!-- New instruction text moved above the student information fields -->
         <p class="main-instruction-text font-bold">
-            Please complete the form and then either use the "Print Form" button to print it and bring it along on the night OR use the "Email Completed Form" button to send us a copy directly.
+            Please complete the form and then use the "Email Completed Form" button to send us a copy directly.
         </p>
 
         <!-- Student Information Fields using CSS Grid -->
@@ -517,9 +454,6 @@
 
 
         <div class="button-group">
-            <button onclick="window.print()" class="action-button print-button">
-                Print Form
-            </button>
             <button onclick="emailFormWithValidation()" class="action-button email-button">
                 Email Completed Form
             </button>
