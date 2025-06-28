@@ -70,7 +70,7 @@
             font-weight: 500;
             color: #555;
             margin-right: 0; /* Handled by column-gap */
-            min-width: unset; /* Let grid define the width */
+            min-width: unset; /* Let grid define the width, allows wrapping */
         }
 
         .form-grid input:not(.fixed-width-input), /* Inputs that are not fixed-width */
@@ -96,7 +96,7 @@
             min-height: 70px; /* For address */
         }
 
-        /* Fixed-width inputs (Postcode, Telephone, Date of birth) */
+        /* Fixed-width inputs (Postcode, Tel no., Date of birth) */
         .fixed-width-input {
             width: 180px; /* Fixed width */
             max-width: 180px; /* Prevent growing */
@@ -110,26 +110,7 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        /* Container for Telephone input and Date of birth fields - now directly in form-grid */
-        .contact-inputs-group {
-            grid-column: 2 / 3; /* Placed in the second column of the main form-grid */
-            display: flex; /* Use flex to keep inputs and DOB label/input on one line */
-            align-items: center;
-            gap: 15px; /* Space between the telephone input and the DOB label */
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            width: 100%; /* Take full width of its grid cell */
-            margin-top: 0px; /* Adjust this if vertical spacing is off. It should be handled by row-gap on .form-grid */
-        }
-
-        /* Date of birth label within the flex container */
-        .contact-inputs-group label[for="dob"] {
-            flex-shrink: 0; /* Prevent shrinking */
-            text-align: right; /* Right align its own text */
-            color: #555;
-            font-weight: 500;
-            margin-right: 0; /* Handled by gap */
-            min-width: unset; /* Allow natural width */
-        }
+        /* The .contact-inputs-group and its specific styles are removed as fields are separated */
 
 
         /* Ordered List Styling for consistent margins */
@@ -296,6 +277,7 @@
                 margin-right: 0; /* Remove right margin */
                 margin-bottom: 2px; /* Small space between label and input */
                 font-size: 0.95rem; /* Slightly smaller label font */
+                max-width: calc(100% - 20px); /* Limit label width to force wrapping */
             }
 
             .form-grid input,
@@ -319,33 +301,14 @@
                 max-width: none !important; /* Remove max-width */
             }
 
-            /* Adjust contact-inputs-group for stacking on mobile */
-            .contact-inputs-group {
-                grid-column: auto; /* No longer spans column 2, just flows naturally */
-                display: block; /* Change to block to force stacking of its children */
-                width: 100%; /* Take full width */
-                gap: 0; /* No gaps needed when stacking */
-                margin-top: 0; /* Keep consistent with form-grid row-gap */
-            }
-            .contact-inputs-group label[for="dob"] {
-                display: block; /* Make DOB label a block element to stack */
-                width: 100%; /* Take full width */
-                text-align: left; /* Left align when stacked */
-                margin-top: 10px; /* Space above DOB label when stacked */
-                margin-bottom: 2px; /* Space between label and input */
-                font-size: 0.95rem; /* Consistent font size */
-            }
-            .contact-inputs-group input#telephone,
-            .contact-inputs-group input#dob {
-                width: 100% !important; /* Ensure fixed-width inputs go full width on mobile */
-                padding: 10px 12px; /* Consistent padding for touch targets */
-                min-height: 45px; /* Consistent height */
-            }
+            /* No specific contact-inputs-group styles needed for mobile as fields are separate now */
 
             /* List item adjustments for mobile */
             ol {
-                margin-left: 20px; /* Slightly reduce list indent on mobile */
-                width: calc(100% - 20px);
+                list-style-position: outside; /* Ensure bullets are outside */
+                margin-left: 15px; /* Adjust list indent to align with content padding (15px for form-container) */
+                padding-left: 0; /* Remove default padding so margin-left controls indent */
+                width: calc(100% - 15px); /* Adjust width to account for new margin-left */
             }
             .numbered-list-item {
                 margin-bottom: 8px; /* Tighter list spacing */
@@ -411,7 +374,7 @@
 
         <!-- New instruction text moved above the student information fields -->
         <p class="main-instruction-text font-bold">
-            Please complete the form and then use the "Email Completed Form" button to send us a copy directly.
+            Please complete the form and then use the "Email Completed Form" button to send us a copy directly. Please contact us if you would prefer a printable version.
         </p>
 
         <!-- Student Information Fields using CSS Grid -->
@@ -428,13 +391,13 @@
             <label for="email">Email:<span class="text-red-500">*</span></label>
             <input type="email" id="email" name="email" required>
 
-            <!-- Telephone no. label and the combined input group are now direct children of form-grid -->
-            <label for="telephone">Telephone no:<span class="text-red-500">*</span></label>
-            <div class="contact-inputs-group">
-                <input type="text" id="telephone" name="telephone" class="fixed-width-input" required>
-                <label for="dob">Date of birth:<span class="text-red-500">*</span></label>
-                <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY" required onblur="checkAgeForParentSignature()">
-            </div>
+            <!-- Tel no. label and input are now direct children of form-grid -->
+            <label for="telephone">Tel no:<span class="text-red-500">*</span></label>
+            <input type="text" id="telephone" name="telephone" class="fixed-width-input" required>
+
+            <!-- Date of birth label and input are now direct children of form-grid -->
+            <label for="dob">Date of birth:<span class="text-red-500">*</span></label>
+            <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY" required onblur="checkAgeForParentSignature()">
         </div>
 
         <p class="certify-text-blue leading-relaxed mt-8 mb-4 font-semibold text-center" style="width: 100%;">
@@ -610,7 +573,7 @@
             body += `Address: ${address}\n`;
             body += `Postcode: ${postcode}\n`;
             body += `Email: ${email}\n`;
-            body += `Telephone no: ${telephone}\n`;
+            body += `Tel no: ${telephone}\n`;
             body += `Date of birth: ${dob}\n\n`;
 
             body += "Medical and Responsibility Declarations:\n";
@@ -637,4 +600,3 @@
     </script>
 </body>
 </html>
-
