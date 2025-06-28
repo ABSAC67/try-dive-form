@@ -56,7 +56,7 @@
         /* CSS Grid for aligning labels and inputs (most fields) */
         .form-grid {
             display: grid;
-            grid-template-columns: minmax(120px, auto) 1fr; /* Column 1 for labels, Column 2 for inputs */
+            grid-template-columns: 140px 1fr; /* Fixed width for labels, 1fr for inputs */
             column-gap: 15px;
             row-gap: 12px;
             width: 100%; /* Ensure it takes full width of form-container */
@@ -70,7 +70,8 @@
             font-weight: 500;
             color: #555;
             margin-right: 0; /* Handled by column-gap */
-            min-width: unset; /* Let grid define the width, allows wrapping */
+            word-wrap: break-word; /* Allow long words to break */
+            overflow-wrap: break-word; /* For better browser support */
         }
 
         .form-grid input:not(.fixed-width-input), /* Inputs that are not fixed-width */
@@ -110,9 +111,6 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        /* The .contact-inputs-group and its specific styles are removed as fields are separated */
-
-
         /* Ordered List Styling for consistent margins */
         ol {
             list-style-position: outside;
@@ -125,8 +123,6 @@
             margin-bottom: 10px;
             color: #333;
             line-height: 1.4;
-            /* Removed explicit padding-left and text-indent here; OL handles positioning */
-            /* Text should naturally wrap and align with the start of the first line given list-style-position: outside */
         }
         .list-spacer {
             border-bottom: 2px solid #3498db;
@@ -267,23 +263,25 @@
             }
 
             .form-grid {
-                grid-template-columns: 1fr; /* Stack labels and inputs into a single column */
-                row-gap: 8px; /* Tighter row gap for stacked elements */
+                grid-template-columns: 100px 1fr; /* Fixed width for labels, 1fr for inputs on mobile */
+                row-gap: 8px; /* Tighter row gap for grid elements */
+                column-gap: 10px; /* Slightly reduced column gap for mobile */
             }
 
             .form-grid label {
-                grid-column: auto; /* Revert to auto column for stacking */
-                text-align: left; /* Left align labels when stacked */
-                margin-right: 0; /* Remove right margin */
-                margin-bottom: 2px; /* Small space between label and input */
-                font-size: 0.95rem; /* Slightly smaller label font */
-                max-width: calc(100% - 20px); /* Limit label width to force wrapping */
+                grid-column: 1 / 2; /* Label remains in the first column */
+                text-align: right; /* Labels right-aligned on mobile too */
+                margin-bottom: 0; /* Row-gap handles vertical spacing */
+                font-size: 0.9rem; /* Slightly smaller font to fit fixed width better */
+                line-height: 1.2; /* Tighter line height for wrapped labels */
+                word-wrap: break-word; /* Ensure long words break */
+                overflow-wrap: break-word; /* For better browser support */
             }
 
             .form-grid input,
             .form-grid textarea {
-                grid-column: auto; /* Revert to auto column for stacking */
-                width: 100%; /* Make inputs full width on mobile */
+                grid-column: 2 / 3; /* Input/Textarea remains in the second column */
+                width: 100%; /* Make inputs full width of their grid column */
                 max-width: none; /* Remove max-width restriction */
                 box-sizing: border-box; /* Crucial for full width */
                 font-size: 1.05rem; /* Slightly larger font for touch targets */
@@ -295,13 +293,11 @@
                 min-height: 80px; /* Increased min-height for address textarea on mobile */
             }
 
-            /* Override fixed-width for mobile, make them full width */
+            /* Fixed-width inputs: these now just inherit the 100% width of the 1fr column */
             .fixed-width-input {
-                width: 100% !important; /* Force full width */
-                max-width: none !important; /* Remove max-width */
+                width: 100% !important; /* Forces full width of its grid cell */
+                max-width: none !important; /* Removes max-width */
             }
-
-            /* No specific contact-inputs-group styles needed for mobile as fields are separate now */
 
             /* List item adjustments for mobile */
             ol {
