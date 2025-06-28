@@ -222,55 +222,22 @@
             box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
         }
 
-        /* Message box for loading/success/error */
-        .message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 25px 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            z-index: 1000;
-            font-size: 1.1rem;
-            color: #333;
-            animation: fadeIn 0.3s ease-out;
-            max-width: 90%; /* Responsive */
-            min-width: 250px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translate(-50%, -60%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        .message-box.hidden {
-            display: none;
-        }
-        .message-box button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            background-color: #3498db;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .message-box button:hover {
-            background-color: #2980b9;
-        }
-
-
         /* Print specific styles */
         @media print {
+            /* Remove default browser headers and footers */
+            @page {
+                margin: 0 !important;
+            }
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                /* Non-standard properties to potentially remove headers/footers in some browsers */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
             body {
                 background-color: #fff;
-                margin: 0;
-                padding: 0;
                 display: block;
                 min-height: auto;
             }
@@ -279,6 +246,7 @@
                 border: none;
                 border-radius: 0;
                 padding: 10px; /* Further reduced padding for print */
+                margin: auto; /* Center the form on the page */
             }
             .button-group,
             .email-info,
@@ -488,7 +456,7 @@
 
         <!-- New instruction text moved above the student information fields -->
         <p class="main-instruction-text font-bold">
-            Please complete the form and then either use the "Print Form" button to print it and bring it along on the night OR use the "Generate & Email PDF" to send us a copy directly.
+            Please complete the form and then either use the "Print Form" button to print it and bring it along on the night OR use the "Email Completed Form" button to send us a copy directly.
         </p>
 
         <!-- Student Information Fields using CSS Grid -->
@@ -538,67 +506,56 @@
             <button onclick="window.print()" class="action-button print-button">
                 Print Form
             </button>
-            <button onclick="submitFormForPdfEmail()" class="action-button email-button">
-                Generate & Email PDF
+            <button onclick="emailForm()" class="action-button email-button">
+                Email Completed Form
             </button>
-        </div>
-
-        <!-- Message box for user feedback -->
-        <div id="messageBox" class="message-box hidden">
-            <p id="messageText"></p>
-            <button onclick="document.getElementById('messageBox').classList.add('hidden');">OK</button>
         </div>
 
     </div>
 
     <script>
-        // REPLACE THIS WITH YOUR ACTUAL CLOUD FUNCTION ENDPOINT
-        const CLOUD_FUNCTION_ENDPOINT = 'YOUR_GCP_CLOUD_FUNCTION_URL_HERE'; // e.g., https://REGION-PROJECT_ID.cloudfunctions.net/your-function-name
+        function emailForm() {
+            // Get form values
+            const studentName = document.getElementById('studentName').value;
+            const address = document.getElementById('address').value;
+            const postcode = document.getElementById('postcode').value;
+            const email = document.getElementById('email').value;
+            const telephone = document.getElementById('telephone').value;
+            const dob = document.getElementById('dob').value;
+            const studentSignature = document.getElementById('studentSignature').value;
+            const parentSignature = document.getElementById('parentSignature').value;
 
-        async function submitFormForPdfEmail() {
-            const formContainer = document.querySelector('.form-container');
-            const messageBox = document.getElementById('messageBox');
-            const messageText = document.getElementById('messageText');
+            // Construct email subject
+            const subject = `${studentName} has submitted a Try Dive medical form`;
 
-            messageText.textContent = "Generating PDF and sending email...";
-            messageBox.classList.remove('hidden');
+            // Construct email body
+            let body = "Try Dive Medical and Responsibility Declaration Form Data:\n\n";
+            body += "Student Information:\n";
+            body += `Name of student: ${studentName}\n`;
+            body += `Address: ${address}\n`;
+            body += `Postcode: ${postcode}\n`;
+            body += `Email: ${email}\n`;
+            body += `Telephone no: ${telephone}\n`;
+            body += `Date of birth: ${dob}\n\n`;
 
-            const formData = {
-                studentName: document.getElementById('studentName').value,
-                address: document.getElementById('address').value,
-                postcode: document.getElementById('postcode').value,
-                email: document.getElementById('email').value,
-                telephone: document.getElementById('telephone').value,
-                dob: document.getElementById('dob').value,
-                studentSignature: document.getElementById('studentSignature').value,
-                parentSignature: document.getElementById('parentSignature').value,
-            };
+            body += "Medical and Responsibility Declarations:\n";
+            body += `User is assumed to have read and understood the following terms:\n`;
+            body += `1. Considers themselves medically fit and does not suffer from any of the disqualifying conditions mentioned above\n`;
+            body += `2. If medically unfit, has obtained approval to dive from a medical referee, ukdmc.org\n`;
+            body += `3. Will, in the interests of safety, comply with all instruction given to them by the instructor\n`;
+            body += `4. Is able to swim and is confident in water\n\n`;
 
-            try {
-                const response = await fetch(CLOUD_FUNCTION_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                });
 
-                if (response.ok) {
-                    messageText.textContent = "Form submitted successfully! PDF emailed.";
-                } else {
-                    const errorData = await response.json();
-                    messageText.textContent = `Error: ${errorData.message || 'Failed to send email.'}`;
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                messageText.textContent = `Network error: ${error.message}. Please try again.`;
-            }
+            body += "Signatures:\n";
+            body += `Signature of student: ${studentSignature}\n`;
+            body += `Signature of parent/guardian (if under 18): ${parentSignature}\n\n`;
+
+            // Encode the body for URL
+            const mailtoLink = `mailto:ABSAC67@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            // Open default email client
+            window.location.href = mailtoLink;
         }
     </script>
 </body>
 </html>
-
-
-
-
-
