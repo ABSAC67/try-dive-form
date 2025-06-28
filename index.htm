@@ -222,6 +222,49 @@
             box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
         }
 
+        /* Message box for user feedback */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+            font-size: 1.1rem;
+            color: #333;
+            animation: fadeIn 0.3s ease-out;
+            max-width: 90%; /* Responsive */
+            min-width: 250px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .message-box.hidden {
+            display: none;
+        }
+        .message-box button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .message-box button:hover {
+            background-color: #2980b9;
+        }
+
+
         /* Print specific styles */
         @media print {
             /* Remove default browser headers and footers */
@@ -461,28 +504,28 @@
 
         <!-- Student Information Fields using CSS Grid -->
         <div class="form-grid">
-            <label for="studentName">Name of student:</label>
-            <input type="text" id="studentName" name="studentName">
+            <label for="studentName">Name of student:<span class="text-red-500">*</span></label>
+            <input type="text" id="studentName" name="studentName" required>
 
-            <label for="address">Address:</label>
-            <textarea id="address" name="address" rows="2"></textarea>
+            <label for="address">Address:<span class="text-red-500">*</span></label>
+            <textarea id="address" name="address" rows="2" required></textarea>
 
-            <label for="postcode">Postcode:</label>
-            <input type="text" id="postcode" name="postcode" class="fixed-width-input">
+            <label for="postcode">Postcode:<span class="text-red-500">*</span></label>
+            <input type="text" id="postcode" name="postcode" class="fixed-width-input" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email">
+            <label for="email">Email:<span class="text-red-500">*</span></label>
+            <input type="email" id="email" name="email" required>
         </div>
 
         <!-- Separate row for Telephone and Date of Birth -->
         <div class="contact-details-row">
             <div class="contact-field-group">
-                <label for="telephone">Telephone no:</label>
-                <input type="text" id="telephone" name="telephone" class="fixed-width-input">
+                <label for="telephone">Telephone no:<span class="text-red-500">*</span></label>
+                <input type="text" id="telephone" name="telephone" class="fixed-width-input" required>
             </div>
             <div class="contact-field-group dob-field">
-                <label for="dob">Date of birth:</label>
-                <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY">
+                <label for="dob">Date of birth:<span class="text-red-500">*</span></label>
+                <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY" required>
             </div>
         </div>
 
@@ -491,8 +534,8 @@
         </p>
 
         <div class="form-grid">
-            <label for="studentSignature">Signature of student:</label>
-            <input type="text" id="studentSignature" name="studentSignature" placeholder="Type name to sign">
+            <label for="studentSignature">Signature of student:<span class="text-red-500">*</span></label>
+            <input type="text" id="studentSignature" name="studentSignature" placeholder="Type name to sign" required>
 
             <label for="parentSignature">Signature of parent/guardian (if under 18):</label>
             <input type="text" id="parentSignature" name="parentSignature" placeholder="Type name to sign">
@@ -506,16 +549,93 @@
             <button onclick="window.print()" class="action-button print-button">
                 Print Form
             </button>
-            <button onclick="emailForm()" class="action-button email-button">
+            <button onclick="emailFormWithValidation()" class="action-button email-button">
                 Email Completed Form
             </button>
+        </div>
+
+        <!-- Message box for user feedback -->
+        <div id="messageBox" class="message-box hidden">
+            <p id="messageText"></p>
+            <button onclick="document.getElementById('messageBox').classList.add('hidden');">OK</button>
         </div>
 
     </div>
 
     <script>
-        function emailForm() {
-            // Get form values
+        // Function to display messages in the custom message box
+        function showMessage(message) {
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden');
+        }
+
+        function calculateAge(dobString) {
+            // Assumes dobString is in DD/MM/YYYY format
+            const parts = dobString.split('/');
+            if (parts.length !== 3) {
+                return null; // Invalid format
+            }
+
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+
+            // Basic date validation
+            if (isNaN(day) || isNaN(month) || isNaN(year) || day < 1 || day > 31 || month < 1 || month > 12) {
+                return null; // Invalid date numbers
+            }
+
+            const birthDate = new Date(year, month - 1, day); // Month is 0-indexed in JS Date
+            const currentDate = new Date();
+
+            // Check if the parsed date is actually valid (e.g., prevents 31/02/2000 from being valid)
+            if (birthDate.getFullYear() !== year || birthDate.getMonth() !== month - 1 || birthDate.getDate() !== day) {
+                return null; // Date object creation corrected an invalid date
+            }
+
+            let age = currentDate.getFullYear() - birthDate.getFullYear();
+
+            // Adjust age if birthday hasn't occurred yet this year
+            if (currentDate.getMonth() < birthDate.getMonth() ||
+                (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function emailFormWithValidation() {
+            // List of required fields by their IDs
+            const requiredFields = [
+                'studentName',
+                'address',
+                'postcode',
+                'email',
+                'telephone',
+                'dob',
+                'studentSignature'
+            ];
+
+            let allFieldsFilled = true;
+            let missingFields = [];
+
+            // Check if all required fields are filled
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    allFieldsFilled = false;
+                    missingFields.push(field.previousElementSibling.textContent.replace(':', '').replace('*', '').trim());
+                    // Add a temporary visual cue if desired, e.g., field.style.borderColor = 'red';
+                }
+            });
+
+            if (!allFieldsFilled) {
+                showMessage(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                return; // Stop execution if validation fails
+            }
+
+            // Get form values after validation
             const studentName = document.getElementById('studentName').value;
             const address = document.getElementById('address').value;
             const postcode = document.getElementById('postcode').value;
@@ -523,10 +643,21 @@
             const telephone = document.getElementById('telephone').value;
             const dob = document.getElementById('dob').value;
             const studentSignature = document.getElementById('studentSignature').value;
-            const parentSignature = document.getElementById('parentSignature').value;
+            const parentSignature = document.getElementById('parentSignature').value; // Optional field
+
+            // Calculate age and determine U18 status
+            let subjectSuffix = "";
+            const age = calculateAge(dob);
+
+            if (age === null) {
+                showMessage("Invalid Date of Birth format. Please use DD/MM/YYYY.");
+                return; // Stop if DOB is invalid
+            } else if (age < 18) {
+                subjectSuffix = " (U18)";
+            }
 
             // Construct email subject
-            const subject = `${studentName} has submitted a Try Dive medical form`;
+            const subject = `${studentName} has submitted a Try Dive medical form${subjectSuffix}`;
 
             // Construct email body
             let body = "Try Dive Medical and Responsibility Declaration Form Data:\n\n";
@@ -548,9 +679,9 @@
 
             body += "Signatures:\n";
             body += `Signature of student: ${studentSignature}\n`;
-            body += `Signature of parent/guardian (if under 18): ${parentSignature}\n\n`;
+            body += `Signature of parent/guardian (if under 18): ${parentSignature || 'N/A'}\n\n`; // Show N/A if blank
 
-            // Encode the body for URL
+            // Encode the body and subject for URL
             const mailtoLink = `mailto:ABSAC67@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
             // Open default email client
@@ -559,3 +690,4 @@
     </script>
 </body>
 </html>
+
