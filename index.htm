@@ -282,14 +282,16 @@
                 background-color: #fff;
                 display: block;
                 min-height: auto;
-                font-size: 0.85rem; /* Reduced base font size for print */
+                font-size: 0.8rem; /* Even smaller base font for print */
             }
             .form-container {
                 box-shadow: none;
                 border: none;
                 border-radius: 0;
-                padding: 5px; /* Further reduced padding for print */
-                margin: auto; /* Center the form on the page */
+                padding: 5px; /* Minimal padding */
+                margin: auto; /* Center on page */
+                width: 100%; /* Ensure it uses full print width */
+                box-sizing: border-box; /* Include padding in width */
             }
             .button-group,
             .email-info,
@@ -299,47 +301,59 @@
             /* Ensure instruction text is visible on print and matches content styles */
             .main-instruction-text {
                 display: block !important; /* Force display on print */
-                font-size: 0.8rem !important; /* Slightly smaller for compactness */
+                font-size: 0.75rem !important; /* Slightly smaller for compactness */
                 font-weight: bold !important; /* Keep bold for print */
                 color: #000 !important; /* Ensure black text for print */
-                margin-top: 8px !important; /* Tighter spacing */
-                margin-bottom: 10px !important; /* Tighter spacing */
+                margin-top: 5px !important; /* Tighter spacing */
+                margin-bottom: 8px !important; /* Tighter spacing */
                 padding: 0 !important; /* No horizontal padding */
                 text-align: left !important;
-                line-height: 1.2 !important; /* Tighter line height for instructions */
+                line-height: 1.1 !important; /* Tighter line height for instructions */
             }
-            /* Main grid layout for form fields */
+            /* Main grid layout for print */
             .form-grid {
                 display: grid;
-                grid-template-columns: 110px 1fr; /* Fixed width for labels, auto for inputs */
-                column-gap: 8px; /* Further reduced column gap */
-                row-gap: 6px; /* Further reduced row gap */
+                grid-template-columns: 100px 1fr; /* Fixed width for labels, auto for inputs */
+                column-gap: 5px; /* Minimal column gap */
+                row-gap: 4px; /* Minimal row gap */
                 width: 100%;
             }
+            /* Labels within form-grid for print */
             .form-grid label {
-                color: #000; /* Ensure black text */
+                grid-column: 1 / 2; /* Ensure label is in first column */
                 text-align: right;
                 align-self: center;
+                padding-right: 0; /* Remove padding here, controlled by column-gap */
+                box-sizing: border-box;
                 font-weight: 500;
-                padding-right: 0; /* No extra padding */
+                color: #000;
+                line-height: 1.1; /* Tighter line height */
+                font-size: 0.85rem; /* Consistent font size */
+                margin-bottom: 0; /* Row-gap handles this */
             }
-            /* General input/textarea print styles within the grid */
-            .form-grid input,
+            /* Inputs/Textareas within form-grid for print */
+            .form-grid input:not(.fixed-width-input),
             .form-grid textarea {
+                grid-column: 2 / 3; /* Ensure input is in second column */
+                width: 100%;
                 border: none !important;
-                border-bottom: 1px dotted #999 !important; /* Dotted line */
+                border-bottom: 1px dotted #999 !important;
                 background-color: transparent !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
-                padding: 0 5px !important;
+                padding: 0 2px !important; /* Minimal padding */
                 color: #000;
-                width: 100%; /* Fill available space */
-                box-sizing: border-box; /* Important for width calculation */
-                flex-grow: 1; /* Allow to grow if in a flex context */
-                min-height: 1em; /* Ensure a minimum height for input lines */
-                font-size: 0.85rem; /* Match body font size */
+                box-sizing: border-box;
+                min-height: 1em;
+                font-size: 0.85rem; /* Consistent font size */
+                margin-bottom: 0; /* Row-gap handles this */
             }
-            /* Hide placeholder text on print for all inputs and textareas */
+
+            .form-grid textarea {
+                min-height: 2em; /* Even shorter for address */
+            }
+
+            /* Hide placeholder text on print */
             input::placeholder,
             textarea::placeholder {
                 color: transparent !important;
@@ -361,97 +375,56 @@
                 color: transparent !important;
             }
 
-
-            .form-grid textarea {
-                min-height: 3em; /* Further reduced min-height for address on print */
-            }
-
-            /* Fixed-width inputs (Postcode, Telephone, Date of birth) */
+            /* Fixed-width inputs (Postcode, Telephone, Date of birth) for print */
             .fixed-width-input {
-                width: 150px !important; /* Slightly reduced fixed width for more space */
-                max-width: 150px !important;
+                width: 120px !important; /* Further reduced fixed width */
+                max-width: 120px !important;
                 flex-shrink: 0 !important;
-                flex-grow: 0 !important; /* Do not grow */
+                flex-grow: 0 !important;
             }
 
-            /* Contact inputs group for print */
+            /* Special handling for telephone and DOB line for print */
             .contact-inputs-group {
-                grid-column: 2 / 3 !important;
-                display: flex !important;
+                grid-column: 2 / 3 !important; /* Ensure it stays in the second column of the form-grid */
+                display: flex !important; /* Keep flex for horizontal alignment */
                 align-items: center !important;
-                gap: 8px !important; /* Smaller gap for print */
+                gap: 5px !important; /* Very small gap for print */
                 flex-wrap: wrap !important;
-                width: 100%;
-                margin-top: 0 !important; /* Ensure no extra margin for print */
+                width: 100% !important; /* Ensure it takes full width of its grid cell */
+                margin-top: 0 !important; /* Vertical spacing controlled by parent form-grid row-gap */
+                margin-bottom: 0 !important; /* Vertical spacing controlled by parent form-grid row-gap */
             }
             .contact-inputs-group label[for="dob"] {
                 flex-shrink: 0 !important;
                 text-align: right !important;
-                margin-right: 0 !important;
-                min-width: unset !important;
+                padding-right: 0 !important; /* No padding, gap handles it */
                 color: #000 !important;
+                font-weight: 500 !important;
+                font-size: 0.85rem !important;
+                margin-right: 0 !important; /* Gap handles spacing */
             }
-            /* Inputs within contact-inputs-group also need dotted lines */
             .contact-inputs-group input {
-                border: none !important;
-                border-bottom: 1px dotted #999 !important;
-                background-color: transparent !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                padding: 0 5px !important;
-                color: #000;
-                min-height: 1em; /* Ensure a minimum height for input lines */
+                /* Inherits from form-grid input styles */
             }
 
-
-            /* Ensure all other text elements are black for print */
-            p {
-                margin-bottom: 6px !important; /* Reduced paragraph margin */
-                margin-top: 6px !important;
-                line-height: 1.2 !important; /* Tighter line height */
-                color: #000 !important;
-            }
+            /* Generic print styles for other elements */
+            p { margin-bottom: 4px !important; margin-top: 4px !important; line-height: 1.15 !important; color: #000 !important; }
             ol {
-                margin-left: 30px !important;    /* Match screen styles for print */
-                padding-left: 0 !important;      /* Match screen styles for print */
-                width: calc(100% - 30px) !important; /* Match screen styles for print */
+                list-style-position: outside;
+                margin-left: 20px !important; /* Slightly reduce overall list indent for print */
+                padding-left: 0 !important;
+                width: calc(100% - 20px) !important;
             }
-            li {
-                margin-bottom: 3px !important; /* Further reduced list item margin */
-                line-height: 1.2 !important; /* Tighter line height for list */
-                color: #000 !important;
-            }
-            .numbered-list-item {
-                /* No specific padding/indent needed here as OL handles it */
-            }
-            .section-title {
-                margin-top: 10px !important; /* Reduced margin */
-                margin-bottom: 8px !important; /* Reduced margin */
-                color: #000 !important;
-            }
-            /* Force certify text to black for print */
-            .certify-text-blue {
-                color: #000 !important;
-                margin-top: 10px !important; /* Reduced margin */
-                margin-bottom: 8px !important; /* Reduced margin */
-                font-size: 0.95rem !important; /* Slightly smaller to fit */
-            }
-            .form-header {
-                color: #000 !important; /* Ensure header is black for print */
-                margin-bottom: 8px !important; /* Reduced margin */
-            }
-            .header-spacer {
-                margin-bottom: 10px !important; /* Reduced margin */
-            }
-            .list-spacer {
-                margin-top: 8px !important; /* Reduced margin */
-                margin-bottom: 10px !important; /* Reduced margin */
-            }
+            li { margin-bottom: 2px !important; line-height: 1.15 !important; color: #000 !important; font-size: 0.8rem !important; }
+            .section-title { margin-top: 8px !important; margin-bottom: 6px !important; color: #000 !important; font-size: 0.9rem !important; }
+            .certify-text-blue { color: #000 !important; margin-top: 8px !important; margin-bottom: 6px !important; font-size: 0.85rem !important; }
+            .form-header { color: #000 !important; margin-bottom: 5px !important; font-size: 1.6rem !important; }
+            .header-spacer { margin-bottom: 10px !important; }
+            .list-spacer { margin-top: 8px !important; margin-bottom: 10px !important; }
             .bsac-logo {
-                width: 100px !important; /* Further reduced logo size for print */
+                width: 80px !important; /* Even smaller logo for print */
                 height: auto !important;
-                margin-top: 8px !important; /* Adjusted margin for print */
-                margin-bottom: 8px !important; /* Adjusted margin for print */
+                margin-top: 5px !important; margin-bottom: 5px !important;
             }
         }
     </style>
