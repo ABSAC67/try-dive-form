@@ -110,44 +110,43 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        /* Container for Telephone and Date of Birth fields to be on one line */
-        .contact-details-row {
-            display: flex;
-            width: 100%;
-            justify-content: space-between; /* Pushes Telephone to left, DOB to right */
+        /* Container for Telephone input and Date of birth fields - now directly in form-grid */
+        .contact-inputs-group {
+            grid-column: 2 / 3; /* Placed in the second column of the main form-grid */
+            display: flex; /* Use flex to keep inputs and DOB label/input on one line */
             align-items: center;
-            margin-top: 12px; /* Consistent spacing with grid rows */
-            margin-bottom: 12px;
-            flex-wrap: wrap; /* Allows wrapping on small screens */
-        }
-        .contact-field-group {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0; /* Prevents this group from shrinking too much */
-        }
-        .contact-field-group label {
-            min-width: 120px; /* Align with form-grid labels */
-            text-align: right;
-            margin-right: 15px;
-            font-weight: 500;
-            color: #555;
-            flex-shrink: 0; /* Prevent label from shrinking */
-        }
-        /* Specific styling for DOB label within its group */
-        .contact-field-group.dob-field label {
-            min-width: unset; /* Allow it to be flexible */
-            text-align: left; /* As per PDF */
-            margin-right: 15px; /* Space between label and input */
-            margin-left: 15px; /* Space from previous input */
+            gap: 15px; /* Space between the telephone input and the DOB label */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            width: 100%; /* Take full width of its grid cell */
+            /* Add some top margin to separate from the email field */
+            margin-top: 0px; /* Adjust this if vertical spacing is off. It should be handled by row-gap on .form-grid */
         }
 
+        /* Date of birth label within the flex container */
+        .contact-inputs-group label[for="dob"] {
+            flex-shrink: 0; /* Prevent shrinking */
+            text-align: right; /* Right align its own text */
+            color: #555;
+            font-weight: 500;
+            margin-right: 0; /* Handled by gap */
+            min-width: unset; /* Allow natural width */
+        }
+
+
+        /* Ordered List Styling for consistent margins */
+        ol {
+            list-style-position: outside;
+            margin-left: 30px;    /* Match form-container padding for number alignment */
+            padding-left: 0;      /* Remove default browser padding so numbers start at margin-left */
+            width: calc(100% - 30px); /* Adjust width to prevent overflow due to margin-left */
+        }
 
         .numbered-list-item {
             margin-bottom: 10px;
             color: #333;
             line-height: 1.4;
-            padding-left: 1.5em;
-            text-indent: -1.5em;
+            /* Removed explicit padding-left and text-indent here; OL handles positioning */
+            /* Text should naturally wrap and align with the start of the first line given list-style-position: outside */
         }
         .list-spacer {
             border-bottom: 2px solid #3498db;
@@ -372,37 +371,34 @@
                 flex-grow: 0 !important; /* Do not grow */
             }
 
-            /* Container for Telephone and Date of Birth fields on one line */
-            .contact-details-row {
-                display: flex; /* Maintain flex layout */
-                width: 100%;
-                justify-content: space-between; /* Maintain positioning */
-                align-items: center;
-                margin-top: 6px; /* Further reduced margin */
-                margin-bottom: 6px; /* Further reduced margin */
-                flex-wrap: wrap;
-            }
-            .contact-field-group {
-                display: flex; /* Maintain flex for label/input pairing */
-                align-items: center;
-                flex-shrink: 0;
-            }
-            .contact-field-group label {
-                color: #000;
-                text-align: right;
-                margin-right: 8px; /* Reduced margin */
-                font-weight: 500;
-                min-width: 110px; /* Slightly reduced min-width */
-                flex-shrink: 0;
-            }
-            /* Specific style for DOB label within its group (print) */
-            .contact-field-group.dob-field label {
-                text-align: left !important; /* Keep left align for DOB label */
-                margin-left: 8px !important; /* Reduced margin */
+            /* Telephone no. label for print */
+            .form-grid label[for="telephone"] {
+                grid-column: 1 / 2 !important;
+                text-align: right !important;
+                align-self: center !important;
+                margin-right: 0 !important;
                 min-width: unset !important;
+                color: #000 !important;
             }
-            /* Inputs in contact-details-row also need dotted lines */
-            .contact-details-row input {
+            /* Contact inputs group for print */
+            .contact-inputs-group {
+                grid-column: 2 / 3 !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 8px !important; /* Smaller gap for print */
+                flex-wrap: wrap !important;
+                width: 100%;
+                margin-top: 0 !important; /* Ensure no extra margin for print */
+            }
+            .contact-inputs-group label[for="dob"] {
+                flex-shrink: 0 !important;
+                text-align: right !important;
+                margin-right: 0 !important;
+                min-width: unset !important;
+                color: #000 !important;
+            }
+            /* Inputs within contact-inputs-group also need dotted lines */
+            .contact-inputs-group input {
                 border: none !important;
                 border-bottom: 1px dotted #999 !important;
                 background-color: transparent !important;
@@ -413,6 +409,7 @@
                 min-height: 1em; /* Ensure a minimum height for input lines */
             }
 
+
             /* Ensure all other text elements are black for print */
             p {
                 margin-bottom: 6px !important; /* Reduced paragraph margin */
@@ -420,10 +417,18 @@
                 line-height: 1.3 !important; /* Tighter line height */
                 color: #000 !important;
             }
-            ol, li {
+            ol {
+                margin-left: 30px !important;    /* Match screen styles for print */
+                padding-left: 0 !important;      /* Match screen styles for print */
+                width: calc(100% - 30px) !important; /* Match screen styles for print */
+            }
+            li {
                 margin-bottom: 3px !important; /* Further reduced list item margin */
                 line-height: 1.2 !important; /* Tighter line height for list */
                 color: #000 !important;
+            }
+            .numbered-list-item {
+                /* No specific padding/indent needed here as OL handles it */
             }
             .section-title {
                 margin-top: 10px !important; /* Reduced margin */
@@ -477,7 +482,7 @@
             Try Dives are available on the understanding that the person taking part:
         </p>
 
-        <ol class="list-decimal pl-5 space-y-2 mb-6">
+        <ol class="list-decimal space-y-2 mb-6">
             <li class="numbered-list-item">Considers themselves medically fit and does not suffer from any of the disqualifying
                 conditions mentioned above</li>
             <li class="numbered-list-item">If medically unfit, has obtained approval to dive from a medical referee, ukdmc.org</li>
@@ -515,17 +520,13 @@
 
             <label for="email">Email:<span class="text-red-500">*</span></label>
             <input type="email" id="email" name="email" required>
-        </div>
 
-        <!-- Separate row for Telephone and Date of Birth -->
-        <div class="contact-details-row">
-            <div class="contact-field-group">
-                <label for="telephone">Telephone no:<span class="text-red-500">*</span></label>
+            <!-- Telephone no. label and the combined input group are now direct children of form-grid -->
+            <label for="telephone">Telephone no:<span class="text-red-500">*</span></label>
+            <div class="contact-inputs-group">
                 <input type="text" id="telephone" name="telephone" class="fixed-width-input" required>
-            </div>
-            <div class="contact-field-group dob-field">
                 <label for="dob">Date of birth:<span class="text-red-500">*</span></label>
-                <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY" required>
+                <input type="text" id="dob" name="dob" class="fixed-width-input" placeholder="DD/MM/YYYY" required onblur="checkAgeForParentSignature()">
             </div>
         </div>
 
@@ -537,7 +538,7 @@
             <label for="studentSignature">Signature of student:<span class="text-red-500">*</span></label>
             <input type="text" id="studentSignature" name="studentSignature" placeholder="Type name to sign" required>
 
-            <label for="parentSignature">Signature of parent/guardian (if under 18):</label>
+            <label for="parentSignature">Signature of parent/guardian (if under 18):<span id="parentSignatureAsterisk" class="text-red-500 hidden">*</span></label>
             <input type="text" id="parentSignature" name="parentSignature" placeholder="Type name to sign">
         </div>
 
@@ -605,9 +606,28 @@
             return age;
         }
 
+        // Function to dynamically show/hide the parent signature asterisk
+        function checkAgeForParentSignature() {
+            const dobField = document.getElementById('dob');
+            const parentSignatureAsterisk = document.getElementById('parentSignatureAsterisk');
+            const dobValue = dobField.value.trim();
+
+            if (dobValue) {
+                const age = calculateAge(dobValue);
+                if (age !== null && age < 18) {
+                    parentSignatureAsterisk.classList.remove('hidden');
+                } else {
+                    parentSignatureAsterisk.classList.add('hidden');
+                }
+            } else {
+                parentSignatureAsterisk.classList.add('hidden'); // Hide if DOB is empty
+            }
+        }
+
+
         function emailFormWithValidation() {
-            // List of required fields by their IDs
-            const requiredFields = [
+            // Base required fields
+            let requiredFields = [
                 'studentName',
                 'address',
                 'postcode',
@@ -617,6 +637,17 @@
                 'studentSignature'
             ];
 
+            // Conditionally add parentSignature to requiredFields
+            const dobValue = document.getElementById('dob').value.trim();
+            const age = calculateAge(dobValue);
+
+            if (age === null) {
+                showMessage("Invalid Date of Birth format. Please use DD/MM/YYYY.");
+                return; // Stop if DOB is invalid
+            } else if (age < 18) {
+                requiredFields.push('parentSignature'); // Add it if under 18
+            }
+
             let allFieldsFilled = true;
             let missingFields = [];
 
@@ -625,8 +656,13 @@
                 const field = document.getElementById(fieldId);
                 if (!field.value.trim()) {
                     allFieldsFilled = false;
-                    missingFields.push(field.previousElementSibling.textContent.replace(':', '').replace('*', '').trim());
-                    // Add a temporary visual cue if desired, e.g., field.style.borderColor = 'red';
+                    // For display, use the text content of the label associated with the input
+                    let labelText = document.querySelector(`label[for="${field.id}"]`).textContent.replace(':', '').replace('*', '').trim();
+                    if (labelText) {
+                        missingFields.push(labelText);
+                    } else {
+                        missingFields.push(fieldId); // Fallback to ID if label not found
+                    }
                 }
             });
 
@@ -645,14 +681,9 @@
             const studentSignature = document.getElementById('studentSignature').value;
             const parentSignature = document.getElementById('parentSignature').value; // Optional field
 
-            // Calculate age and determine U18 status
+            // Calculate age and determine U18 status for subject line
             let subjectSuffix = "";
-            const age = calculateAge(dob);
-
-            if (age === null) {
-                showMessage("Invalid Date of Birth format. Please use DD/MM/YYYY.");
-                return; // Stop if DOB is invalid
-            } else if (age < 18) {
+            if (age < 18) { // Age is already checked for validity above
                 subjectSuffix = " (U18)";
             }
 
@@ -690,4 +721,3 @@
     </script>
 </body>
 </html>
-
