@@ -626,8 +626,8 @@
 
 
         function emailFormWithValidation() {
-            // Base required fields
-            let requiredFields = [
+            // Initial list of fields that are *always* required
+            const alwaysRequiredFields = [
                 'studentName',
                 'address',
                 'postcode',
@@ -637,41 +637,49 @@
                 'studentSignature'
             ];
 
-            // Conditionally add parentSignature to requiredFields
+            let allBaseFieldsFilled = true;
+            let missingFieldsLabels = []; // Store labels for missing fields
+
+            // 1. Check if all base required fields are filled
+            alwaysRequiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    allBaseFieldsFilled = false;
+                    // Get the label text for the missing field
+                    const labelElement = document.querySelector(`label[for="${field.id}"]`);
+                    let labelText = labelElement ? labelElement.textContent.replace(':', '').replace('*', '').trim() : fieldId;
+                    missingFieldsLabels.push(labelText);
+                }
+            });
+
+            // If any base required fields are missing, show a general error and stop
+            if (!allBaseFieldsFilled) {
+                showMessage(`Please fill in all required fields: ${missingFieldsLabels.join(', ')}.`);
+                return;
+            }
+
+            // At this point, all basic required fields (including DOB) have a value.
+            // Now, perform DOB format validation.
             const dobValue = document.getElementById('dob').value.trim();
             const age = calculateAge(dobValue);
 
             if (age === null) {
                 showMessage("Invalid Date of Birth format. Please use DD/MM/YYYY.");
-                return; // Stop if DOB is invalid
-            } else if (age < 18) {
-                requiredFields.push('parentSignature'); // Add it if under 18
+                return; // Stop execution immediately if DOB format is invalid
             }
 
-            let allFieldsFilled = true;
-            let missingFields = [];
-
-            // Check if all required fields are filled
-            requiredFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (!field.value.trim()) {
-                    allFieldsFilled = false;
-                    // For display, use the text content of the label associated with the input
-                    let labelText = document.querySelector(`label[for="${field.id}"]`).textContent.replace(':', '').replace('*', '').trim();
-                    if (labelText) {
-                        missingFields.push(labelText);
-                    } else {
-                        missingFields.push(fieldId); // Fallback to ID if label not found
-                    }
+            // 3. Conditionally check parent signature if student is under 18
+            const parentSignatureField = document.getElementById('parentSignature');
+            if (age < 18) {
+                if (!parentSignatureField.value.trim()) {
+                    showMessage("Please fill in all required fields: Signature of parent/guardian is required as student is under 18.");
+                    return; // Stop execution with specific message
                 }
-            });
-
-            if (!allFieldsFilled) {
-                showMessage(`Please fill in all required fields: ${missingFields.join(', ')}.`);
-                return; // Stop execution if validation fails
             }
 
-            // Get form values after validation
+            // If all validation passes, proceed to email generation
+
+            // Get form values (again, or use a single collection from the start if preferred)
             const studentName = document.getElementById('studentName').value;
             const address = document.getElementById('address').value;
             const postcode = document.getElementById('postcode').value;
@@ -683,7 +691,8 @@
 
             // Calculate age and determine U18 status for subject line
             let subjectSuffix = "";
-            if (age < 18) { // Age is already checked for validity above
+            // Age is already validated and calculated above.
+            if (age < 18) {
                 subjectSuffix = " (U18)";
             }
 
