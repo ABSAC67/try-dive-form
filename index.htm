@@ -278,7 +278,7 @@
                 box-shadow: none;
                 border: none;
                 border-radius: 0;
-                padding: 15px; /* Reduced padding for print */
+                padding: 10px; /* Further reduced padding for print */
             }
             .button-group,
             .email-info,
@@ -288,21 +288,21 @@
             /* Ensure instruction text is visible on print and matches content styles */
             .main-instruction-text {
                 display: block !important; /* Force display on print */
-                font-size: 1rem !important; /* Consistent with other body text */
-                font-weight: normal !important; /* Remove bold for print unless specified */
+                font-size: 0.9rem !important; /* Slightly smaller for compactness */
+                font-weight: bold !important; /* Keep bold for print */
                 color: #000 !important; /* Ensure black text for print */
-                margin-top: 20px !important; /* Keep consistent spacing */
-                margin-bottom: 25px !important; /* Keep consistent spacing */
+                margin-top: 10px !important; /* Tighter spacing */
+                margin-bottom: 15px !important; /* Tighter spacing */
                 padding: 0 !important; /* No horizontal padding */
                 text-align: left !important;
-                line-height: 1.5 !important;
+                line-height: 1.3 !important; /* Tighter line height for instructions */
             }
             /* Main grid layout for form fields */
             .form-grid {
                 display: grid;
                 grid-template-columns: minmax(120px, auto) 1fr; /* Keep screen's column structure */
-                column-gap: 10px; /* Reduced column gap */
-                row-gap: 8px; /* Reduced row gap */
+                column-gap: 8px; /* Further reduced column gap */
+                row-gap: 6px; /* Further reduced row gap */
                 width: 100%;
             }
             .form-grid label {
@@ -324,7 +324,7 @@
                 width: 100%; /* Fill available space */
                 box-sizing: border-box; /* Important for width calculation */
                 flex-grow: 1; /* Allow to grow if in a flex context */
-                min-height: 1.2em; /* Ensure a minimum height for input lines */
+                min-height: 1em; /* Ensure a minimum height for input lines */
             }
             /* Hide placeholder text on print for all inputs and textareas */
             input::placeholder,
@@ -350,13 +350,13 @@
 
 
             .form-grid textarea {
-                min-height: 4em; /* Reduced min-height for address on print */
+                min-height: 3.5em; /* Further reduced min-height for address on print */
             }
 
             /* Fixed-width inputs (Postcode, Telephone, Date of birth) */
             .fixed-width-input {
-                width: 180px !important; /* Maintain fixed width */
-                max-width: 180px !important;
+                width: 160px !important; /* Slightly reduced fixed width for more space */
+                max-width: 160px !important;
                 flex-shrink: 0 !important;
                 flex-grow: 0 !important; /* Do not grow */
             }
@@ -367,8 +367,8 @@
                 width: 100%;
                 justify-content: space-between; /* Maintain positioning */
                 align-items: center;
-                margin-top: 8px; /* Reduced margin */
-                margin-bottom: 8px; /* Reduced margin */
+                margin-top: 6px; /* Further reduced margin */
+                margin-bottom: 6px; /* Further reduced margin */
                 flex-wrap: wrap;
             }
             .contact-field-group {
@@ -379,15 +379,15 @@
             .contact-field-group label {
                 color: #000;
                 text-align: right;
-                margin-right: 10px; /* Reduced margin */
+                margin-right: 8px; /* Reduced margin */
                 font-weight: 500;
-                min-width: 120px; /* Align with main form-grid labels */
+                min-width: 110px; /* Slightly reduced min-width */
                 flex-shrink: 0;
             }
             /* Specific style for DOB label within its group (print) */
             .contact-field-group.dob-field label {
                 text-align: left !important; /* Keep left align for DOB label */
-                margin-left: 10px !important; /* Reduced margin */
+                margin-left: 8px !important; /* Reduced margin */
                 min-width: unset !important;
             }
             /* Inputs in contact-details-row also need dotted lines */
@@ -399,48 +399,49 @@
                 border-radius: 0 !important;
                 padding: 0 5px !important;
                 color: #000;
-                min-height: 1.2em; /* Ensure a minimum height for input lines */
+                min-height: 1em; /* Ensure a minimum height for input lines */
             }
 
             /* Ensure all other text elements are black for print */
             p {
-                margin-bottom: 8px !important; /* Reduced paragraph margin */
-                margin-top: 8px !important;
-                line-height: 1.4 !important; /* Slightly tighter line height */
+                margin-bottom: 6px !important; /* Reduced paragraph margin */
+                margin-top: 6px !important;
+                line-height: 1.3 !important; /* Tighter line height */
                 color: #000 !important;
             }
             ol, li {
-                margin-bottom: 5px !important; /* Reduced list item margin */
-                line-height: 1.3 !important; /* Tighter line height for list */
+                margin-bottom: 3px !important; /* Further reduced list item margin */
+                line-height: 1.2 !important; /* Tighter line height for list */
                 color: #000 !important;
             }
             .section-title {
-                margin-top: 15px !important; /* Reduced margin */
-                margin-bottom: 10px !important; /* Reduced margin */
+                margin-top: 10px !important; /* Reduced margin */
+                margin-bottom: 8px !important; /* Reduced margin */
                 color: #000 !important;
             }
             /* Force certify text to black for print */
             .certify-text-blue {
                 color: #000 !important;
-                margin-top: 15px !important; /* Reduced margin */
-                margin-bottom: 10px !important; /* Reduced margin */
+                margin-top: 10px !important; /* Reduced margin */
+                margin-bottom: 8px !important; /* Reduced margin */
+                font-size: 0.95rem !important; /* Slightly smaller to fit */
             }
             .form-header {
                 color: #000 !important; /* Ensure header is black for print */
-                margin-bottom: 10px !important; /* Reduced margin */
+                margin-bottom: 8px !important; /* Reduced margin */
             }
             .header-spacer {
-                margin-bottom: 15px !important; /* Reduced margin */
+                margin-bottom: 10px !important; /* Reduced margin */
             }
             .list-spacer {
-                margin-top: 10px !important; /* Reduced margin */
-                margin-bottom: 15px !important; /* Reduced margin */
+                margin-top: 8px !important; /* Reduced margin */
+                margin-bottom: 10px !important; /* Reduced margin */
             }
             .bsac-logo {
-                width: 120px !important; /* Slightly smaller for print */
+                width: 100px !important; /* Further reduced logo size for print */
                 height: auto !important;
-                margin-top: 10px !important; /* Adjusted margin for print */
-                margin-bottom: 10px !important; /* Adjusted margin for print */
+                margin-top: 8px !important; /* Adjusted margin for print */
+                margin-bottom: 8px !important; /* Adjusted margin for print */
             }
         }
     </style>
@@ -596,6 +597,7 @@
     </script>
 </body>
 </html>
+
 
 
 
